@@ -1,0 +1,80 @@
+/**
+ * 2) There are N employee sitting in consecutive cubicles , we have to send a few of them to onsite , but each time we send one employee on site , his cubicle becomes empty , now the other employees from both side of that empty cubicle stops working until they are given a gift .
+the gifts are given in both sides of the empty cubicle until we reach the end or found
+another empty cubicle,
+Input – number of cubicle , and index numbers of people to be sent
+output- min number of gifts needed
+Can some one better explain the question? What do you me
+an by until we reach end or found other cubicle? There is always an other cubicle other than at ends !!
+It’s empty cubicle. I have edited the question.  I think your doubt must have cleared now.
+
+Hint: we have to find the order in which we will sent the people on site , find the index that’s in the middle or near about middle and send him out , keep doing the same for left and right sub array , there are many other ways of doing this by using binary trees .
+For both the questions, input and output were in string format.
+
+INPUT 
+5  -- number of employee
+1 0 0 0 1  // 1 for onsite 0- here only
+
+OUTPUT
+7    // # of gifts needs
+ */
+
+
+import java.util.*;
+
+public class Solution2 {
+
+
+	static int partition(int[] arr, int low, int high)
+	{
+		if(low >= high)
+			return 0;
+		int index = -1;
+		int mid = (low + high)>>1;
+		int min = Integer.MAX_VALUE;
+		int temp = 0;
+		int count = 0;
+		boolean even = (high - low + 1)%2==0?true:false;
+		for (int i = low; i <= high ; i++) 
+		{
+			if(arr[i] == 1)
+			{
+				temp = Math.abs(mid - i);
+				if(temp < min)
+				{
+					min = temp;
+					index = i;
+				}
+				if(even)
+				{
+					temp = Math.abs(mid+1 - i);
+					if(temp < min)
+					{
+						min = temp;
+						index = i;
+					}
+				}
+			}
+		}
+		if(index == -1)
+			return count;
+		else
+			count += (high-low);
+		count += partition(arr, low, index-1);
+		count += partition(arr, index+1, high);
+		return count;
+			
+		
+	}
+    
+    
+    public static void main(String[] args) {
+        /* Enter your code here. Read input from STDIN. Print output to STDOUT. Your class should be named Solution. */
+        Scanner in = new Scanner(System.in);
+        int n  = in.nextInt();
+        int[] arr = new int[n];
+        for (int i = 0; i < arr.length; i++) 
+        	arr[i] = in.nextInt();
+        System.out.println(partition(arr, 0, n-1));
+    }
+}
