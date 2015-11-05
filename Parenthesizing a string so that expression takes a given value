@@ -1,0 +1,68 @@
+/**
+ * Parenthesizing a string so that expression takes a given value
+ */
+import java.util.*;
+class Solution
+{
+	static boolean func(int[][] matrix, int[] str, int n, int symbol)
+	{
+		Set<Integer>[][] T = new Set[n][n];
+		
+		// Assign the value
+		for(int i=0; i<n; i++)
+		{
+			T[i][i] = new HashSet<Integer>();
+			T[i][i].add(str[i]);
+		}
+		
+		
+		 for(int gap = 1; gap<n; gap++)
+		 {
+			 for( int i = 0, j = gap; j<n; i++, j++)
+			 {		 
+				 T[i][j] =  new HashSet<Integer>();
+				
+				 for(int k=i; k < i+gap; k++)
+				 {
+					 Iterator<Integer> outer = T[i][k].iterator();
+					 while(outer.hasNext())
+					 {
+						 int elementOuter = outer.next();
+						 Iterator<Integer> inner = T[k+1][j].iterator();
+						 while(inner.hasNext())
+						 {
+							 int elementInner = inner.next();
+							 int val = matrix[elementOuter][elementInner];
+							 T[i][j].add(val);
+						 }
+					 }
+				 }
+			 }
+			
+		 }
+		 if(T[0][n-1].contains(symbol))
+			 return true;
+		 return false;
+	}
+	
+	
+    public static void main(String args[] ) throws Exception 
+    {
+    	int[] stringNew = {1, 1, 1, 1, 0}; // for String "bbbba"
+    	int element = 3;
+    	/**
+    	 * Here a -> 0       
+    	 *      b -> 1
+    	 *      c -> 2
+    	 *      
+    	 *      Table                  Equivalent Table
+    	 *      * a b c         \      * 0 1 2
+    	 *      a b b a    ------\     0 1 1 0
+    	 *      b c b a    ------/     1 2 1 0
+    	 *      c a c c         /      2 0 2 2
+    	 */
+    	int     matrix[][] = {{1, 1, 0},{2, 1, 0},{0, 2, 2}}; //multiplication table
+    	
+    	System.out.println(func(matrix, stringNew, stringNew.length, 0));
+    }
+}
